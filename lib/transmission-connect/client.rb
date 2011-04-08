@@ -3,7 +3,7 @@ module Transmission
 
   class Client
     SESSION_STAT_ARGS = %w(activeTorrentCount downloadSpeed pausedTorrentCount torrentCount uploadSpeed cumulative-stats current-stats)
-    TORRENT_ARGS = %w(downloadDir hashString id isFinished name percentDone sizeWhenDone status totalSize)
+    TORRENT_ARGS = %w(downloadDir hashString id isFinished name percentDone sizeWhenDone status totalSize error errorString)
     CHECK_WAIT = 1
     CHECK = 2
     DOWNLOAD = 4
