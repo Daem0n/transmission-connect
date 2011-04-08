@@ -18,24 +18,28 @@ class TestClient < Test::Unit::TestCase
     end
 
     should "get all torrents info" do
-      assert_instance_of Hash, @connect.get_info
+      result = @connect.get_info
+      assert_instance_of Hash, result
+      assert_not_nil result['torrents']
+      assert_instance_of Array, result['torrents']
     end
 
     context 'with torrent' do
       setup do
-        @count = @connect.session_stats["torrentCount"]
         @arg_count = Transmission::Client::TORRENT_ARGS.count
       end
 
       should "add magnet link to downloads" do
+        @count = @connect.session_stats["torrentCount"]
         result = @connect.add_bt_magnet(@hash)
         count = @connect.session_stats["torrentCount"]
         assert_equal @count + 1, count
-#        @count = count
         assert_equal @hash.upcase, result['torrent-added']['hashString'].upcase
+        @connect.rem_bt_magnet(@hash)
       end
 
       should 'get info about all' do
+        @count = @connect.session_stats["torrentCount"]
         result = @connect.get_info
         assert_instance_of Hash, result
         assert_equal @count, result['torrents'].count
@@ -44,16 +48,40 @@ class TestClient < Test::Unit::TestCase
         end
       end
 
+      should "remove by magnet link" do
+        @connect.add_bt_magnet(@hash)
+        @count = @connect.session_stats["torrentCount"]
+        result = @connect.rem_bt_magnet(@hash)
+        assert_equal @count - 1, @connect.session_stats["torrentCount"]
+      end
+
       should 'get info by hash' do
+        @connect.add_bt_magnet(@hash)
         result = @connect.get_info(@hash)
         assert_instance_of Hash, result
         assert_equal 1, result['torrents'].count
         assert_equal @arg_count, result['torrents'].first.keys.count
+        @connect.rem_bt_magnet(@hash)
       end
 
-      should "remove by magnet link" do
-        result = @connect.rem_bt_magnet(@hash)
-        assert_equal @count - 1, @connect.session_stats["torrentCount"]
+      should 'pause torrent' do
+        @connect.add_bt_magnet(@hash)
+        @connect.pause_magnet(@hash)
+        sleep 1
+        result = @connect.get_info(@hash)
+        assert_equal Transmission::Client::STOPPED, result['torrents'].first['status']
+        @connect.rem_bt_magnet(@hash)
+      end
+
+      should 'unpause torrent' do
+        @connect.add_bt_magnet(@hash)
+        @connect.pause_magnet(@hash)
+        sleep 1
+        @connect.unpause_magnet(@hash)
+        sleep 4
+        result = @connect.get_info(@hash)
+        assert_not_equal Transmission::Client::STOPPED, result['torrents'].first['status']
+        @connect.rem_bt_magnet(@hash)
       end
 
     end
