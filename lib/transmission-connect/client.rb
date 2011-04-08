@@ -3,7 +3,7 @@ module Transmission
 
   class Client
     SESSION_STAT_ARGS = %w(activeTorrentCount downloadSpeed pausedTorrentCount torrentCount uploadSpeed cumulative-stats current-stats)
-    TORRENT_ARGS = %w(downloadDir hashString id isFinished name percentDone sizeWhenDone status totalSize error errorString)
+    TORRENT_ARGS = %w(downloadDir hashString id isFinished name percentDone status totalSize error errorString rateDownload rateUpload)
     CHECK_WAIT = 1
     CHECK = 2
     DOWNLOAD = 4
@@ -16,7 +16,6 @@ module Transmission
         8 => :seed,
         16 => :stopped
     }
-
 
     def initialize(host = '127.0.0.1', port = 9091, username = nil, password = nil)
       @header = username.nil? ? {} : {'Authorization' => Base64.encode64("#{username}:#{password}")}
@@ -35,6 +34,14 @@ module Transmission
 
     def rem_bt_magnet(hash)
       request('torrent-remove', {:ids => hash.to_a})
+    end
+
+    def pause_magnet(hash)
+      request('torrent-stop', {:ids => hash.to_a})
+    end
+
+    def unpause_magnet(hash)
+      request('torrent-start', {:ids => hash.to_a})
     end
 
     def get_info(hash = nil)
