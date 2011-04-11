@@ -28,7 +28,8 @@ Gem::Specification.new do |s|
     "lib/transmission-connect/client.rb",
     "test/helper.rb",
     "test/test_client.rb",
-    "test/test_transmission-connect.rb"
+    "test/test_transmission-connect.rb",
+    "transmission-connect.gemspec"
   ]
   s.homepage = %q{http://github.com/Daem0n/transmission-connect}
   s.licenses = ["MIT"]
