@@ -33,7 +33,7 @@ module Transmission
     end
 
     def rem_bt_magnet(hash)
-      request('torrent-remove', {:ids => hash.to_a})
+      request('torrent-remove', {:ids => hash.to_a, 'delete-local-data' => true})
     end
 
     def pause_magnet(hash)
