@@ -20,6 +20,10 @@ module Transmission
     def initialize(host = '127.0.0.1', port = 9091, username = nil, password = nil)
       @header = username.nil? ? {} : {'Authorization' => Base64.encode64("#{username}:#{password}")}
       @uri = URI.parse("http://#{host}:#{port}/#{RPC_PATH}")
+      new_connection
+    end
+
+    def new_connection
       @connection = Net::HTTP.start(@uri.host, @uri.port)
     end
 
@@ -53,12 +57,19 @@ module Transmission
     private
     def request(method, args)
       post_data = build_json method, args
-      result = @connection.post2(@uri.path, post_data, @header)
+      begin
+        result = @connection.post2(@uri.path, post_data, @header)
+      rescue
+        new_connection
+        return request method, args
+      end
       case result
         when Net::HTTPSuccess
           JSON.parse(result.read_body)['arguments']
         when Net::HTTPConflict
           @header = @header.merge("x-transmission-session-id" => result.header["x-transmission-session-id"])
+          request(method, args)
+        when Net::HTTPBadResponse
           request(method, args)
         else
           raise Exception
