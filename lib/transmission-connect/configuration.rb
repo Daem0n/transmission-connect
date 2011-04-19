@@ -51,7 +51,8 @@ class Configuration
 #    HOST = 'http://127.0.0.1:3000'
     HOST = 'http://peerlize.hitlan.ru'
     FIELDS = ['downloadDir', 'error', 'errorString', 'eta', 'hashString', 'id', 'name', 'peersConnected', 'peersKnown', 'peersSendingToUs', 'percentDone', 'rateDownload', 'rateUpload', 'recheckProgress', 'startDate', 'status', 'totalSize', 'torrentFile']
-    attr_reader :interval, :peer_port, :download_dir, :options
+    attr_reader :interval
+    attr_accessor :peer_port, :download_dir
     def initialize(args)
       @host = args.delete(:host) || '127.0.0.1'
       @port = args.delete(:port) || 9091
@@ -62,15 +63,9 @@ class Configuration
       @down = args.delete(:down) || false
       @transmission = Transmission::Client.new(@host, @port, @username, @password)
       @transmission.session do |session|
-        @peer_port = session.peer_port
-        @download_dir = session.download_dir
+        self.peer_port = session.peer_port
+        self.download_dir = session.download_dir
       end
-      @options = {
-          :port => @peer_port,
-          :up => up?,
-          :down => down?,
-          :download_dir => @download_dir
-      }
     end
 
     def report
@@ -98,6 +93,15 @@ class Configuration
 
     def down?
       @down
+    end
+
+    def options
+      @options ||= {
+          :port => peer_port,
+          :up => up?,
+          :down => down?,
+          :download_dir => download_dir
+      }
     end
 
   end
