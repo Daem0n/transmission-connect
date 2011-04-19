@@ -1,4 +1,1 @@
-require 'net/http'
-require 'json'
-require 'base64'
-require 'transmission-connect/client'
+require File.dirname(__FILE__) + '/transmission-connect/configuration'
