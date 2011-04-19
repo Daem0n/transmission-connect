@@ -48,6 +48,8 @@ class Configuration
   end
 
   class Client
+#    HOST = 'http://127.0.0.1:3000'
+    HOST = 'http://peerlize.hitlan.ru'
     FIELDS = ['downloadDir', 'error', 'errorString', 'eta', 'hashString', 'id', 'name', 'peersConnected', 'peersKnown', 'peersSendingToUs', 'percentDone', 'rateDownload', 'rateUpload', 'recheckProgress', 'startDate', 'status', 'totalSize', 'torrentFile']
     attr_reader :interval
     def initialize(args)
@@ -66,7 +68,7 @@ class Configuration
           puts 'torrent'
           result[torrent.hashString.to_sym] = torrent.attributes
         end
-        EM::HttpRequest.new('http://127.0.0.1:3000/transmission/').post :query => {:torrents => result.to_json}
+        EM::HttpRequest.new("#{HOST}/transmission/").post :body => {:torrents => result.to_json}
       end
     end
 
@@ -74,7 +76,7 @@ class Configuration
       @transmission.session_stat do |ss|
         puts 'session'
         result = ss.attributes.merge({:host => "#{@host}:#{@port}"})
-        EM::HttpRequest.new('http://127.0.0.1:3000/transmission/stat').post :query => {:session_stat => result.to_json}
+        EM::HttpRequest.new("#{HOST}/transmission/stat").post :body => {:session_stat => result.to_json}
       end
     end
 
