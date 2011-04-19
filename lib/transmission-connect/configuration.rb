@@ -48,22 +48,34 @@ class Configuration
   end
 
   class Client
-#    HOST = 'http://127.0.0.1:3000'
-    HOST = 'http://peerlize.hitlan.ru'
+    HOST = 'http://127.0.0.1:3000'
+#    HOST = 'http://peerlize.hitlan.ru'
     FIELDS = ['downloadDir', 'error', 'errorString', 'eta', 'hashString', 'id', 'name', 'peersConnected', 'peersKnown', 'peersSendingToUs', 'percentDone', 'rateDownload', 'rateUpload', 'recheckProgress', 'startDate', 'status', 'totalSize', 'torrentFile']
-    attr_reader :interval
+    attr_reader :interval, :peer_port, :download_dir, :options
     def initialize(args)
       @host = args.delete(:host) || '127.0.0.1'
       @port = args.delete(:port) || 9091
       @username = args[:username]
       @password = args[:password]
       @interval = args.delete(:interval) || 5
+      @up = args.delete(:up) || false
+      @down = args.delete(:down) || false
       @transmission = Transmission::Client.new(@host, @port, @username, @password)
+      @transmission.session do |session|
+        @peer_port = session.peer-port
+        @download_dir = session.download-dir
+      end
+      @options = {
+          :port => @peer_port,
+          :up => up?,
+          :down => down?,
+          :download_dir => @download_dir
+      }
     end
 
     def report
       @transmission.torrents(FIELDS) do |torrents|
-        result = {:host => "#{@host}:#{@port}"}
+        result = {:client => options}
         torrents.each do |torrent|
           puts 'torrent'
           result[torrent.hashString.to_sym] = torrent.attributes
@@ -75,9 +87,17 @@ class Configuration
     def session_stats
       @transmission.session_stat do |ss|
         puts 'session'
-        result = ss.attributes.merge({:host => "#{@host}:#{@port}"})
+        result = ss.attributes.merge(:client => options)
         EM::HttpRequest.new("#{HOST}/transmission/stat").post :body => {:session_stat => result.to_json}
       end
+    end
+
+    def up?
+      @up
+    end
+
+    def down?
+      @down
     end
 
   end

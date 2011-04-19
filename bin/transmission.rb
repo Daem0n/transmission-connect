@@ -3,9 +3,9 @@
 require 'rubygems'
 require 'yaml'
 require 'transmission-client'
-require '../lib/transmission-connect'
+require 'lib/transmission-connect'
 
-CONFIG = "../config/transmission.yml"
+CONFIG = "config/transmission.yml"
 result = []
 
 while true
