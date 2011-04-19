@@ -23,6 +23,7 @@ while true
         end
       end
     end
-  rescue
+  rescue Exception => e
+    puts "Error: #{e.message}"
   end
 end

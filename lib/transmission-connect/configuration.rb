@@ -48,8 +48,8 @@ class Configuration
   end
 
   class Client
-    HOST = 'http://127.0.0.1:3000'
-#    HOST = 'http://peerlize.hitlan.ru'
+#    HOST = 'http://127.0.0.1:3000'
+    HOST = 'http://peerlize.hitlan.ru'
     FIELDS = ['downloadDir', 'error', 'errorString', 'eta', 'hashString', 'id', 'name', 'peersConnected', 'peersKnown', 'peersSendingToUs', 'percentDone', 'rateDownload', 'rateUpload', 'recheckProgress', 'startDate', 'status', 'totalSize', 'torrentFile']
     attr_reader :interval, :peer_port, :download_dir, :options
     def initialize(args)
@@ -62,8 +62,8 @@ class Configuration
       @down = args.delete(:down) || false
       @transmission = Transmission::Client.new(@host, @port, @username, @password)
       @transmission.session do |session|
-        @peer_port = session.peer-port
-        @download_dir = session.download-dir
+        @peer_port = session.peer_port
+        @download_dir = session.download_dir
       end
       @options = {
           :port => @peer_port,
