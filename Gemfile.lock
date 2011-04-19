@@ -1,6 +1,20 @@
+GIT
+  remote: git://github.com/Daem0n/transmission-client.git
+  revision: b0ec8d4e14c212eb833746b430522487547ae91c
+  specs:
+    transmission-client (0.0.3)
+      em-http-request
+
 GEM
   remote: http://rubygems.org/
   specs:
+    addressable (2.2.5)
+    em-http-request (0.3.0)
+      addressable (>= 2.0.0)
+      escape_utils
+      eventmachine (>= 0.12.9)
+    escape_utils (0.2.3)
+    eventmachine (0.12.10)
     git (1.2.5)
     jeweler (1.5.2)
       bundler (~> 1.0.0)
@@ -20,3 +34,4 @@ DEPENDENCIES
   json
   rcov
   shoulda
+  transmission-client (>= 0.0.3)!
