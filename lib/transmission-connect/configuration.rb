@@ -51,7 +51,7 @@ class Configuration
 #    HOST = 'http://127.0.0.1:3000'
     HOST = 'http://peerlize.hitlan.ru'
     FIELDS = ['downloadDir', 'error', 'errorString', 'eta', 'hashString', 'id', 'name', 'peersConnected', 'peersKnown', 'peersSendingToUs', 'percentDone', 'rateDownload', 'rateUpload', 'recheckProgress', 'startDate', 'status', 'totalSize', 'torrentFile']
-    attr_reader :interval
+    attr_reader :interval, :host, :port, :transmission
     attr_accessor :peer_port, :download_dir
     def initialize(args)
       @host = args.delete(:host) || '127.0.0.1'
@@ -72,7 +72,6 @@ class Configuration
       @transmission.torrents(FIELDS) do |torrents|
         result = {:client => options}
         torrents.each do |torrent|
-          puts 'torrent'
           result[torrent.hashString.to_sym] = torrent.attributes
         end
         EM::HttpRequest.new("#{HOST}/transmission/").post :body => {:torrents => result.to_json}
@@ -81,7 +80,6 @@ class Configuration
 
     def session_stats
       @transmission.session_stat do |ss|
-        puts 'session'
         result = ss.attributes.merge(:client => options)
         EM::HttpRequest.new("#{HOST}/transmission/stat").post :body => {:session_stat => result.to_json}
       end
