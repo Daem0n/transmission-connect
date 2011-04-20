@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/Daem0n/transmission-client.git
-  revision: b0ec8d4e14c212eb833746b430522487547ae91c
+  revision: 8e29fde4f60975eb3656f22dbcaa0234ead614af
   specs:
-    transmission-client (0.0.3)
+    transmission-client (0.0.4)
       em-http-request
 
 GEM
