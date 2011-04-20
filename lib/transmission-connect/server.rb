@@ -4,9 +4,12 @@ module TransmissionServer
   def receive_data data
     query = JSON.parse(data)
     case query['command']
-      when 'new'
-        respond = 'new'
+      when 'add'
+        respond = 'add'
+        target = query['client']
         ## Add magnet link to download client
+        session = data.find{|client| client.host == target['host'] and client.port == target['port']}
+        client.add_torrent_by_file(query['uri'])
       when 'move'
         respond = 'move'
         ## Move torrent from download to upload client
