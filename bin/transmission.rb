@@ -22,6 +22,9 @@ while true
           client.session_stats
         end
       end
+      EventMachine::start_server "127.0.0.1", 2456, TransmissionServer do |server|
+        server.data = transmission
+      end
     end
   rescue Exception => e
     puts "Error: #{e.message}"
