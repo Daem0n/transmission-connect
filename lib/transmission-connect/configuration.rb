@@ -100,7 +100,8 @@ class Configuration
           :port => peer_port,
           :up => up?,
           :down => down?,
-          :download_dir => download_dir
+          :download_dir => download_dir,
+          :host => @host
       }
     end
 
