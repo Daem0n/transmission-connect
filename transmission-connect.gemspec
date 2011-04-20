@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{transmission-connect}
-  s.version = "0.3.0"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dmitry Brazhkin"]
-  s.date = %q{2011-04-19}
+  s.date = %q{2011-04-20}
   s.description = %q{Simple connector to transmission bittorrent client by HTTP-RPC}
   s.email = %q{dbrazhkin@gmail.com}
   s.executables = ["transmission.rb"]
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "lib/transmission-connect.rb",
     "lib/transmission-connect/client.rb",
     "lib/transmission-connect/configuration.rb",
+    "lib/transmission-connect/server.rb",
     "test/helper.rb",
     "test/test_client.rb",
     "test/test_transmission-connect.rb",
