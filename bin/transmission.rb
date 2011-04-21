@@ -6,9 +6,19 @@ require 'transmission-client'
 require 'lib/transmission-connect'
 
 CONFIG = "config/transmission.yml"
-result = []
+@exit = false
 
-while true
+trap("INT") do
+  EventMachine::stop_event_loop
+  @exit = true
+end
+
+trap("TERM") do
+  EventMachine::stop_event_loop
+  @exit = true
+end
+
+while !@exit
   begin
     EventMachine.run do
       transmission = Configuration.new(YAML.load_file(CONFIG))
