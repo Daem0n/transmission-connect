@@ -4,7 +4,7 @@ source "http://rubygems.org"
 #   gem "activesupport", ">= 2.3.5"
 
 gem 'json'
-gem 'transmission-client', '>=0.0.3', :git => "git://github.com/Daem0n/transmission-client.git"
+gem 'transmission-client', '>=0.0.5', :git => "git://github.com/Daem0n/transmission-client.git"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
