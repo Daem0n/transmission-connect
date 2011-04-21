@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/Daem0n/transmission-client.git
-  revision: 018467cbe55f4a3172894616b80435e6963a53bf
+  revision: 73d54e96c87b89987540e6623d99917940c00382
   specs:
-    transmission-client (0.0.6)
+    transmission-client (0.0.7)
       em-http-request
 
 GEM
@@ -34,4 +34,4 @@ DEPENDENCIES
   json
   rcov
   shoulda
-  transmission-client (>= 0.0.6)!
+  transmission-client (>= 0.0.7)!
