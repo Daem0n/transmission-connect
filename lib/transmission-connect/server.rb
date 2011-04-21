@@ -9,7 +9,10 @@ module TransmissionServer
         target = query['client']
         ## Add magnet link to download client
         session = @connectors.find{|client| client.host == target['host'] and client.peer_port == target['port']}
-        session.transmission.add_torrent_by_file(query['uri']) unless session.nil?
+        if session
+          session.transmission.add_torrent_by_file(query['uri'])
+          session.transmission.add_tracker(query['hash'], 'http://retracker.local/announce') if query['hash']
+        end
       when 'move'
         respond = 'move'
         ## Move torrent from download to upload client
